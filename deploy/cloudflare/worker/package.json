@@ -1,0 +1,16 @@
+{
+  "name": "llm-router-edge-proxy",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Cloudflare Worker edge proxy for LLM Router backend",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260501.0",
+    "typescript": "^5.3.0",
+    "wrangler": "^4.0.0"
+  }
+}

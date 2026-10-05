@@ -1,0 +1,92 @@
+:root {
+  --monitor-primary: #145c66;
+  --monitor-primary-weak: #d8ecea;
+  --monitor-accent: #b98235;
+  --monitor-accent-weak: #f0dfc3;
+  --monitor-success: #2f8f6f;
+  --monitor-warn: #b98235;
+  --monitor-ink: #102033;
+  --monitor-ink-soft: #162a42;
+  --monitor-text: #2d261d;
+  --monitor-text-muted: #766955;
+  --monitor-bg: #eee6d7;
+  --monitor-bg-panel: #fffaf1;
+  --monitor-bg-soft: #f6eedf;
+  --monitor-border: #d9cbb4;
+  --monitor-shadow: 0 22px 60px rgba(67, 49, 25, 0.12);
+}
+
+html.dark,
+html[data-theme='dark'] {
+  --monitor-primary: #4fb8b3;
+  --monitor-primary-weak: #123c3d;
+  --monitor-accent: #d0a35a;
+  --monitor-accent-weak: #3d3120;
+  --monitor-success: #5cc19a;
+  --monitor-warn: #d0a35a;
+  --monitor-ink: #08101c;
+  --monitor-ink-soft: #111f32;
+  --monitor-text: #e8edf1;
+  --monitor-text-muted: #9fb0bd;
+  --monitor-bg: #0c1422;
+  --monitor-bg-panel: #111d2e;
+  --monitor-bg-soft: #0b1728;
+  --monitor-border: #2c3d56;
+  --monitor-shadow: 0 22px 60px rgba(0, 0, 0, 0.26);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100vh;
+}
+
+body {
+  margin: 0;
+  font-family: "Avenir Next", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: var(--monitor-bg);
+  color: var(--monitor-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ant-card {
+  border-color: var(--monitor-border) !important;
+  box-shadow: none;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.ant-card:hover {
+  border-color: color-mix(in srgb, var(--monitor-primary) 35%, var(--monitor-border));
+}
+
+.ant-btn {
+  box-shadow: none !important;
+}
+
+.ant-input,
+.ant-select-selector {
+  border-radius: 10px !important;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--monitor-text-muted) 40%, transparent);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--monitor-text-muted) 60%, transparent);
+}

@@ -1,0 +1,23 @@
+{
+  "provider_type": "deepseek",
+  "models": [
+    {
+      "id": "deepseek-v4-pro",
+      "display_name": "DeepSeek V4 Pro",
+      "context_window": "1M",
+      "supports_vision": false,
+      "supports_tools": true,
+      "languages": ["zh", "en"],
+      "tags": ["chat", "general", "reasoning", "function-call", "deepseek", "chinese", "high-quality"]
+    },
+    {
+      "id": "deepseek-v4-flash",
+      "display_name": "DeepSeek V4 Flash",
+      "context_window": "1M",
+      "supports_vision": false,
+      "supports_tools": true,
+      "languages": ["zh", "en"],
+      "tags": ["chat", "general", "reasoning", "function-call", "deepseek", "chinese", "fast"]
+    }
+  ]
+}

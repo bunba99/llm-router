@@ -1,0 +1,6 @@
+[
+  {"model_name": "moonshot-v1-8k", "input_price_per_1k": 0.12, "output_price_per_1k": 0.12},
+  {"model_name": "moonshot-v1-32k", "input_price_per_1k": 0.24, "output_price_per_1k": 0.24},
+  {"model_name": "moonshot-v1-128k", "input_price_per_1k": 0.6, "output_price_per_1k": 0.6},
+  {"model_name": "kimi-k2-free", "input_price_per_1k": 0.0, "output_price_per_1k": 0.0, "notes": "free tier"}
+]

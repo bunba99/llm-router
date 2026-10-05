@@ -1,0 +1,6 @@
+[
+  {"model_name": "claude-opus-4", "input_price_per_1k": 15.0, "output_price_per_1k": 75.0},
+  {"model_name": "claude-sonnet-4", "input_price_per_1k": 3.0, "output_price_per_1k": 15.0},
+  {"model_name": "claude-3.7-sonnet", "input_price_per_1k": 3.0, "output_price_per_1k": 15.0},
+  {"model_name": "claude-3.5-haiku", "input_price_per_1k": 0.25, "output_price_per_1k": 1.25}
+]

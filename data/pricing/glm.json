@@ -1,0 +1,6 @@
+[
+  {"model_name": "glm-4-plus", "input_price_per_1k": 0.5, "output_price_per_1k": 0.5},
+  {"model_name": "glm-4-air", "input_price_per_1k": 0.1, "output_price_per_1k": 0.1},
+  {"model_name": "glm-4-flash", "input_price_per_1k": 0.0, "output_price_per_1k": 0.0, "notes": "free tier"},
+  {"model_name": "glm-zero-preview", "input_price_per_1k": 0.0, "output_price_per_1k": 0.0, "notes": "free tier"}
+]

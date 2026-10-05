@@ -1,0 +1,7 @@
+[
+  {"model_name": "qwen-plus", "input_price_per_1k": 0.4, "output_price_per_1k": 1.2},
+  {"model_name": "qwen-max", "input_price_per_1k": 1.6, "output_price_per_1k": 4.8},
+  {"model_name": "qwen-turbo", "input_price_per_1k": 0.08, "output_price_per_1k": 0.24},
+  {"model_name": "qwen2.5-72b-instruct", "input_price_per_1k": 0.9, "output_price_per_1k": 2.7},
+  {"model_name": "qwen2.5-7b-instruct-free", "input_price_per_1k": 0.0, "output_price_per_1k": 0.0, "notes": "free tier"}
+]

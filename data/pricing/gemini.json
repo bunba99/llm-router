@@ -1,0 +1,7 @@
+[
+  {"model_name": "gemini-2.5-pro", "input_price_per_1k": 1.25, "output_price_per_1k": 10.0},
+  {"model_name": "gemini-2.0-flash", "input_price_per_1k": 0.1, "output_price_per_1k": 0.4},
+  {"model_name": "gemini-1.5-pro", "input_price_per_1k": 1.25, "output_price_per_1k": 5.0},
+  {"model_name": "gemini-1.5-flash", "input_price_per_1k": 0.075, "output_price_per_1k": 0.3},
+  {"model_name": "gemini-2.0-flash-exp", "input_price_per_1k": 0.0, "output_price_per_1k": 0.0, "notes": "free tier"}
+]

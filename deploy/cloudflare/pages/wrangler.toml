@@ -1,0 +1,22 @@
+# Cloudflare Pages configuration for the LLM Router Monitor frontend.
+#
+# The monitor UI is a React/Vite SPA built from frontend/.
+# Deploy it to Cloudflare Pages where it calls the backend API at the
+# origin specified by VITE_API_BASE_URL (default /api).
+#
+# Deployment:
+#   cd frontend && npm run build
+#   npx wrangler pages deploy dist --project-name llm-router-monitor
+#
+# Or via Git integration: connect this repo to Cloudflare Pages,
+# set build command: cd frontend && npm ci && npm run build
+# set output directory: frontend/dist
+
+name = "llm-router-monitor"
+compatibility_date = "2026-05-06"
+pages_build_output_dir = "frontend/dist"
+
+[env.production]
+# Point VITE_API_BASE_URL to your backend origin (the Cloudflare Tunnel domain or direct host)
+[vars]
+NODE_VERSION = "20"

@@ -1,0 +1,9 @@
+[
+  {"model_name": "deepseek-v4-pro", "input_price_per_1k": 0.435, "output_price_per_1k": 0.87, "notes": "75% discount until 2026-05-31; original: $1.74/$3.48 per 1M tokens"},
+  {"model_name": "deepseek-v4-flash", "input_price_per_1k": 0.14, "output_price_per_1k": 0.28},
+  {"model_name": "deepseek-chat", "input_price_per_1k": 0.14, "output_price_per_1k": 0.28, "notes": "deprecated, routes to deepseek-v4-flash non-thinking"},
+  {"model_name": "deepseek-reasoner", "input_price_per_1k": 0.55, "output_price_per_1k": 2.19, "notes": "deprecated, routes to deepseek-v4-flash thinking"},
+  {"model_name": "deepseek-v3", "input_price_per_1k": 0.14, "output_price_per_1k": 0.28},
+  {"model_name": "deepseek-r1", "input_price_per_1k": 0.55, "output_price_per_1k": 2.19},
+  {"model_name": "deepseek-r1-free", "input_price_per_1k": 0.0, "output_price_per_1k": 0.0, "notes": "free tier"}
+]

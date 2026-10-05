@@ -1,0 +1,259 @@
+package config
+
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+	"strings"
+)
+
+type ProviderConfig struct {
+	Name      string         `json:"name" toml:"name"`
+	Type      string         `json:"type" toml:"type"`
+	BaseURL   *string        `json:"base_url,omitempty" toml:"base_url"`
+	APIKey    *string        `json:"api_key,omitempty" toml:"api_key"`
+	APIKeyEnv *string        `json:"api_key_env,omitempty" toml:"api_key_env"`
+	IsActive  bool           `json:"is_active" toml:"is_active"`
+	Settings  map[string]any `json:"settings,omitempty" toml:"settings"`
+}
+
+func (c ProviderConfig) ResolvedAPIKeys() []string {
+	if c.APIKey != nil && strings.TrimSpace(*c.APIKey) != "" {
+		return splitCSV(*c.APIKey)
+	}
+	if c.APIKeyEnv != nil && strings.TrimSpace(*c.APIKeyEnv) != "" {
+		return splitCSV(os.Getenv(strings.TrimSpace(*c.APIKeyEnv)))
+	}
+	return nil
+}
+
+func (c ProviderConfig) ResolvedAPIKey() *string {
+	keys := c.ResolvedAPIKeys()
+	if len(keys) == 0 {
+		return nil
+	}
+	return &keys[0]
+}
+
+type RateLimitEntry struct {
+	MaxRequests int64          `json:"max_requests" toml:"max_requests"`
+	PerSeconds  int64          `json:"per_seconds" toml:"per_seconds"`
+	BurstSize   *int64         `json:"burst_size,omitempty" toml:"burst_size"`
+	Notes       *string        `json:"notes,omitempty" toml:"notes"`
+	Config      map[string]any `json:"config,omitempty" toml:"config"`
+}
+
+type ModelConfigEntry struct {
+	Name             string          `json:"name" toml:"name"`
+	Provider         string          `json:"provider" toml:"provider"`
+	DisplayName      *string         `json:"display_name,omitempty" toml:"display_name"`
+	Description      *string         `json:"description,omitempty" toml:"description"`
+	RemoteIdentifier *string         `json:"remote_identifier,omitempty" toml:"remote_identifier"`
+	IsActive         bool            `json:"is_active" toml:"is_active"`
+	Tags             []string        `json:"tags,omitempty" toml:"tags"`
+	DefaultParams    map[string]any  `json:"default_params,omitempty" toml:"default_params"`
+	Config           map[string]any  `json:"config,omitempty" toml:"config"`
+	DownloadURI      *string         `json:"download_uri,omitempty" toml:"download_uri"`
+	LocalPath        *string         `json:"local_path,omitempty" toml:"local_path"`
+	RateLimit        *RateLimitEntry `json:"rate_limit,omitempty" toml:"rate_limit"`
+}
+
+type ServerConfig struct {
+	Host                  *string `json:"host,omitempty" toml:"host"`
+	Port                  *int    `json:"port,omitempty" toml:"port"`
+	AllowLocalWithoutAuth *bool   `json:"allow_local_without_auth,omitempty" toml:"allow_local_without_auth"`
+}
+
+type MonitorConfig struct {
+	Port       *int    `json:"port,omitempty" toml:"port"`
+	APIURL     *string `json:"api_url,omitempty" toml:"api_url"`
+	APIBaseURL *string `json:"api_base_url,omitempty" toml:"api_base_url"`
+}
+
+type LoggingConfig struct {
+	Level         string `json:"level,omitempty" toml:"level"`
+	Format        string `json:"format,omitempty" toml:"format"`
+	StdoutEnabled bool   `json:"stdout_enabled" toml:"stdout_enabled"`
+	FilePath      string `json:"file_path,omitempty" toml:"file_path"`
+}
+
+type RoutingPairConfig struct {
+	Name        string `json:"name" toml:"name"`
+	StrongModel string `json:"strong_model" toml:"strong_model"`
+	WeakModel   string `json:"weak_model" toml:"weak_model"`
+}
+
+type RoutingConfig struct {
+	AnalyzerModel       *string                        `json:"analyzer_model,omitempty" toml:"analyzer_model"`
+	DefaultStrongModel  *string                        `json:"default_strong_model,omitempty" toml:"default_strong_model"`
+	DefaultWeakModel    *string                        `json:"default_weak_model,omitempty" toml:"default_weak_model"`
+	DefaultPair         *string                        `json:"default_pair,omitempty" toml:"default_pair"`
+	Pairs               []RoutingPairConfig            `json:"pairs,omitempty" toml:"pairs"`
+	AnalyzerTimeoutMS   int                            `json:"analyzer_timeout_ms" toml:"analyzer_timeout_ms"`
+	AutoFallbackMode    string                         `json:"auto_fallback_mode" toml:"auto_fallback_mode"`
+	LoadBalanceStrategy string                         `json:"load_balance_strategy,omitempty" toml:"load_balance_strategy"`
+	ChannelFallback     []string                       `json:"channel_fallback,omitempty" toml:"channel_fallback"`
+	ProviderWeights     map[string]int64               `json:"provider_weights,omitempty" toml:"provider_weights"`
+	DynamicWeights      *DynamicWeightsConfig          `json:"dynamic_weights,omitempty" toml:"dynamic_weights"`
+	CircuitBreaker      *CircuitBreakerConfig          `json:"circuit_breaker,omitempty" toml:"circuit_breaker"`
+	HealthCheck         *HealthCheckConfig             `json:"health_check,omitempty" toml:"health_check"`
+	ModelOverrides      map[string]ModelOverrideConfig `json:"model_overrides,omitempty" toml:"model_overrides"`
+}
+
+type DynamicWeightsConfig struct {
+	Enabled               bool  `json:"enabled" toml:"enabled"`
+	WindowMinutes         int64 `json:"window_minutes" toml:"window_minutes"`
+	UpdateIntervalSeconds int64 `json:"update_interval_seconds" toml:"update_interval_seconds"`
+	MinSamples            int64 `json:"min_samples" toml:"min_samples"`
+}
+
+type CircuitBreakerConfig struct {
+	Enabled             bool  `json:"enabled" toml:"enabled"`
+	FailureThreshold    int64 `json:"failure_threshold" toml:"failure_threshold"`
+	CooldownSeconds     int64 `json:"cooldown_seconds" toml:"cooldown_seconds"`
+	HalfOpenMaxRequests int64 `json:"half_open_max_requests" toml:"half_open_max_requests"`
+}
+
+type HealthCheckConfig struct {
+	Enabled         bool   `json:"enabled" toml:"enabled"`
+	IntervalSeconds int64  `json:"interval_seconds" toml:"interval_seconds"`
+	TimeoutSeconds  int64  `json:"timeout_seconds" toml:"timeout_seconds"`
+	Path            string `json:"path" toml:"path"`
+}
+
+type ModelOverrideConfig struct {
+	ProviderOrder []string `json:"provider_order" toml:"provider_order"`
+}
+
+type PluginsConfig struct {
+	TTS map[string]map[string]any `json:"tts,omitempty" toml:"tts"`
+	ASR map[string]map[string]any `json:"asr,omitempty" toml:"asr"`
+}
+
+type ModelUpdatesConfig struct {
+	Enabled               bool    `json:"enabled" toml:"enabled"`
+	StartupSync           bool    `json:"startup_sync" toml:"startup_sync"`
+	IntervalHours         int64   `json:"interval_hours" toml:"interval_hours"`
+	WriteRouterTOML       bool    `json:"write_router_toml" toml:"write_router_toml"`
+	DefaultNewModelActive bool    `json:"default_new_model_active" toml:"default_new_model_active"`
+	RemovedModelPolicy    string  `json:"removed_model_policy" toml:"removed_model_policy"`
+	SourceDir             string  `json:"source_dir" toml:"source_dir"`
+	StartupDelaySeconds   float64 `json:"startup_delay_seconds" toml:"startup_delay_seconds"`
+}
+
+type RouterModelConfig struct {
+	Providers    []ProviderConfig    `json:"providers,omitempty" toml:"providers"`
+	Models       []ModelConfigEntry  `json:"models,omitempty" toml:"models"`
+	APIKeys      []APIKeyConfig      `json:"api_keys,omitempty" toml:"api_keys"`
+	Server       *ServerConfig       `json:"server,omitempty" toml:"server"`
+	Monitor      *MonitorConfig      `json:"monitor,omitempty" toml:"monitor"`
+	Logging      *LoggingConfig      `json:"logging,omitempty" toml:"logging"`
+	Routing      *RoutingConfig      `json:"routing,omitempty" toml:"routing"`
+	Plugins      *PluginsConfig      `json:"plugins,omitempty" toml:"plugins"`
+	ModelUpdates *ModelUpdatesConfig `json:"model_updates,omitempty" toml:"model_updates"`
+}
+
+func (c *RouterModelConfig) Normalize() {
+	for i := range c.Providers {
+		if c.Providers[i].Settings == nil {
+			c.Providers[i].Settings = map[string]any{}
+		}
+	}
+	for i := range c.Models {
+		if c.Models[i].DefaultParams == nil {
+			c.Models[i].DefaultParams = map[string]any{}
+		}
+		if c.Models[i].Config == nil {
+			c.Models[i].Config = map[string]any{}
+		}
+	}
+	for i := range c.APIKeys {
+		if !c.APIKeys[i].IsActive {
+			continue
+		}
+	}
+	if c.Logging != nil {
+		if strings.TrimSpace(c.Logging.Level) == "" {
+			c.Logging.Level = "info"
+		}
+		if strings.TrimSpace(c.Logging.Format) == "" {
+			c.Logging.Format = "text"
+		}
+	}
+	if c.Routing != nil {
+		if c.Routing.AnalyzerTimeoutMS == 0 {
+			c.Routing.AnalyzerTimeoutMS = 1500
+		}
+		if strings.TrimSpace(c.Routing.AutoFallbackMode) == "" {
+			c.Routing.AutoFallbackMode = "weak"
+		}
+		if strings.TrimSpace(c.Routing.LoadBalanceStrategy) == "" {
+			c.Routing.LoadBalanceStrategy = "round_robin"
+		}
+		if c.Routing.ProviderWeights == nil {
+			c.Routing.ProviderWeights = map[string]int64{}
+		}
+		if c.Routing.DynamicWeights == nil {
+			c.Routing.DynamicWeights = &DynamicWeightsConfig{}
+		}
+		if c.Routing.DynamicWeights.WindowMinutes <= 0 {
+			c.Routing.DynamicWeights.WindowMinutes = 15
+		}
+		if c.Routing.DynamicWeights.UpdateIntervalSeconds <= 0 {
+			c.Routing.DynamicWeights.UpdateIntervalSeconds = 30
+		}
+		if c.Routing.DynamicWeights.MinSamples <= 0 {
+			c.Routing.DynamicWeights.MinSamples = 20
+		}
+		if c.Routing.CircuitBreaker == nil {
+			c.Routing.CircuitBreaker = &CircuitBreakerConfig{}
+		}
+		if c.Routing.CircuitBreaker.FailureThreshold <= 0 {
+			c.Routing.CircuitBreaker.FailureThreshold = 3
+		}
+		if c.Routing.CircuitBreaker.CooldownSeconds <= 0 {
+			c.Routing.CircuitBreaker.CooldownSeconds = 30
+		}
+		if c.Routing.CircuitBreaker.HalfOpenMaxRequests <= 0 {
+			c.Routing.CircuitBreaker.HalfOpenMaxRequests = 1
+		}
+		if c.Routing.HealthCheck == nil {
+			c.Routing.HealthCheck = &HealthCheckConfig{}
+		}
+		if c.Routing.HealthCheck.IntervalSeconds <= 0 {
+			c.Routing.HealthCheck.IntervalSeconds = 30
+		}
+		if c.Routing.HealthCheck.TimeoutSeconds <= 0 {
+			c.Routing.HealthCheck.TimeoutSeconds = 3
+		}
+		if strings.TrimSpace(c.Routing.HealthCheck.Path) == "" {
+			c.Routing.HealthCheck.Path = "/health"
+		}
+	}
+	if c.ModelUpdates != nil {
+		if c.ModelUpdates.IntervalHours <= 0 {
+			c.ModelUpdates.IntervalHours = 24
+		}
+		if strings.TrimSpace(c.ModelUpdates.RemovedModelPolicy) == "" {
+			c.ModelUpdates.RemovedModelPolicy = "disable_auto_managed"
+		}
+		if strings.TrimSpace(c.ModelUpdates.SourceDir) == "" {
+			c.ModelUpdates.SourceDir = "data/model_sources"
+		}
+	}
+}
+
+// LoadModelConfig currently supports JSON payloads and returns a clear error for TOML.
+// This keeps Go backend behavior explicit until a dedicated TOML parser is added.
+func LoadModelConfig(path string) (RouterModelConfig, error) {
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		return RouterModelConfig{}, fmt.Errorf("read config file: %w", err)
+	}
+	var cfg RouterModelConfig
+	if err := json.Unmarshal(raw, &cfg); err != nil {
+		return RouterModelConfig{}, fmt.Errorf("unsupported config format for %s (expected JSON in Go backend): %w", path, err)
+	}
+	cfg.Normalize()
+	return cfg, nil
+}

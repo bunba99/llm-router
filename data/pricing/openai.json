@@ -1,0 +1,8 @@
+[
+  {"model_name": "gpt-5", "input_price_per_1k": 1.25, "output_price_per_1k": 10.0},
+  {"model_name": "gpt-5-mini", "input_price_per_1k": 0.25, "output_price_per_1k": 2.0},
+  {"model_name": "gpt-5-nano", "input_price_per_1k": 0.05, "output_price_per_1k": 0.4},
+  {"model_name": "gpt-4.1", "input_price_per_1k": 3.0, "output_price_per_1k": 12.0},
+  {"model_name": "gpt-4o", "input_price_per_1k": 2.5, "output_price_per_1k": 10.0},
+  {"model_name": "gpt-4o-mini", "input_price_per_1k": 0.15, "output_price_per_1k": 0.6}
+]

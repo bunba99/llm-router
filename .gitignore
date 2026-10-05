@@ -1,0 +1,52 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Configuration files with sensitive data
+.env
+
+llm_router.db
+llm_datas.db
+model_store/
+data/
+!data/
+data/*
+!data/model_sources/
+!data/model_sources/*.json
+!data/pricing/
+!data/pricing/*.json
+
+# Node.js dependencies
+node_modules/
+frontend/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+# Note: package-lock.json, yarn.lock, pnpm-lock.yaml should be committed
+
+# Log files
+*.log
+logs/
+backend.log
+
+# Test results and temporary files
+test_results.json
+*.backup
+router.toml.backup
+.worktrees/
+
+# Go binary
+llm-router
+llm-router.exe
+
+# Cloudflare Tunnel credentials (contains secrets)
+deploy/cloudflared/credentials.json
+.wrangler/

@@ -1,0 +1,27 @@
+# Drop-in override to add Cloudflare Tunnel to the existing docker-compose stack.
+#
+# Usage:
+#   docker compose -f deploy/compose/docker-compose.yml -f deploy/cloudflared/docker-compose.cloudflared.yml up -d
+#
+# Required env vars (set in .env or shell):
+#   TUNNEL_ID     — Your Cloudflare Tunnel UUID (from `cloudflared tunnel create llm-router`)
+#   TUNNEL_DOMAIN — The public domain routed through Cloudflare, e.g. router.example.com
+
+version: '3.8'
+
+services:
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: llm-router-tunnel
+    command: tunnel run
+    environment:
+      - TUNNEL_ID=${TUNNEL_ID}
+      - TUNNEL_DOMAIN=${TUNNEL_DOMAIN}
+    volumes:
+      - ./config.yml:/etc/cloudflared/config.yml:ro
+      - ./credentials.json:/etc/cloudflared/credentials.json:ro
+    depends_on:
+      - nginx
+    restart: unless-stopped
+    networks:
+      - llm-router-network

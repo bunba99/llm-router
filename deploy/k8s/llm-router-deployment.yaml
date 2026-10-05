@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llm-router
+  labels:
+    app: llm-router
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: llm-router
+  template:
+    metadata:
+      labels:
+        app: llm-router
+    spec:
+      containers:
+        - name: llm-router
+          image: llm-router:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 18000
+              name: http
+          env:
+            - name: LLM_ROUTER_HOST
+              value: "0.0.0.0"
+            - name: LLM_ROUTER_PORT
+              value: "18000"
+            - name: LLM_ROUTER_SQLITE_PATH
+              value: "/app/data/llm_router.db"
+          volumeMounts:
+            - name: router-config
+              mountPath: /app/router.toml
+              subPath: router.toml
+            - name: router-data
+              mountPath: /app/data
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 2
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 20
+            timeoutSeconds: 3
+      volumes:
+        - name: router-config
+          configMap:
+            name: llm-router-config
+        - name: router-data
+          emptyDir: {}

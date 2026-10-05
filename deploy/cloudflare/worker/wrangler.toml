@@ -1,0 +1,28 @@
+# Cloudflare Worker: Thin API proxy for LLM Router backend.
+#
+# This Worker sits in front of your backend (running on a VPS, Fly.io, etc.)
+# and provides edge-level features without touching backend code:
+#   - Optional API key validation before forwarding
+#   - Rate limiting via Cloudflare's built-in rate limiter
+#   - CORS header normalization
+#   - Request/error logging to Cloudflare Analytics
+#
+# Deployment:
+#   npm install
+#   npx wrangler deploy
+#
+# Then configure your domain's DNS to route /api/* and /v1/* through this Worker.
+
+name = "llm-router-proxy"
+main = "src/index.ts"
+compatibility_date = "2026-05-06"
+
+[vars]
+# Backend origin URL (set via `wrangler secret put BACKEND_ORIGIN`)
+# Example: https://router.example.com  or  http://your-vps:18000
+# BACKEND_ORIGIN is a secret — do NOT set it here.
+EDGE_API_KEY_VALIDATION = "false"
+
+[env.production]
+# Workers Unbound is recommended for LLM streaming (up to 15 min CPU time)
+usage_model = "unbound"
